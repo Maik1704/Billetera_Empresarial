@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # Servicio para PHP
+  php:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    networks:
+      - app-network
+
+  # Servicio para la base de datos MySQL
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: billetera
+      MYSQL_USER: empresa
+      MYSQL_PASSWORD: maicol123
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./Schema.sql:/docker-entrypoint-initdb.d/Schema.sql  # Aquí se copia el archivo SQL al contenedor
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
